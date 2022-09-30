@@ -1,0 +1,25 @@
+{% extends 'base.html'%}
+{%load static%}
+
+{%block titulo%} | Cadastro{%endblock%}
+
+{%block corpo%}
+<div class="container">
+    <form action="{% url 'conjugue' Titular.id%}" method="POST"  >
+        {% csrf_token %}
+        <table class="table">
+            {{form}}
+
+            <tr>
+                <td colspan="2">
+                    <button type="submit" class="btn btn-primary">Cadastrar</button>
+               </td>
+            </tr>
+        </table>
+
+    </form>
+
+</div>
+
+
+{%endblock%}

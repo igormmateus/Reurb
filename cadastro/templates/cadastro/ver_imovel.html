@@ -1,0 +1,25 @@
+{% extends 'base.html'%}
+{%load static%}
+
+{%block titulo%} |{{imovel.proprietario}}{%endblock%}
+
+{%block corpo%}
+<h1> {{imovel.proprietario}}</h1>
+<dl>
+    <dt>Logradouro</dt>
+    <dd>{{imovel.logradouro}}</dd>
+
+    <dt> Quadra/Lote</dt>
+    <dd>{{imovel.quadra}}/{{imovel.lote}}</dd>
+
+    <dt> Bairro</dt>
+    <dd>{{imovel.bairro}}</dd>
+
+    <dt> Status</dt>
+    <dd>{{imovel.status}}</dd>
+
+
+
+
+</dl>
+{%endblock%}

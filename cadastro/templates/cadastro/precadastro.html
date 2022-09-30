@@ -1,0 +1,42 @@
+{% extends 'base.html'%}
+{%load static%}
+
+{%block titulo%} | Cadastro{%endblock%}
+
+{%block corpo%}
+<div class="container">
+    <form action="{% url 'precadastro'%}" method="POST"  >
+        {% csrf_token %}
+        <table class="table">
+            <tr>
+                <th><label for="id_proprietario">Proprietario:</label></th>
+                <td>
+
+                  <select name="proprietario" required id="id_proprietario">
+
+                      {% for titular in titulares%}
+
+                            <option value="{{titular.id}}" selected>{{titular.nome}}
+                            </option>
+
+                      {% endfor %}
+
+
+                  </select>
+                </td>
+          </tr>
+
+            {{form}}
+           <tr>
+                <td colspan="2">
+                    <button type="submit" class="btn btn-primary">Cadastrar</button>
+                    <button type="button" class="btn btn-primary" onclick="gerar_requerimento()"> Gerar Requerimento</button>
+                </td>
+            </tr>
+        </table>
+
+    </form>
+
+</div>
+
+{%endblock%}

@@ -1,0 +1,28 @@
+{% extends 'base.html'%}
+{%load static%}
+
+{%block titulo%} | Cadastro{%endblock%}
+
+{%block corpo%}
+<div class="container">
+    <form action="{% url 'cadastro_beneficiario'%}" method="POST"  >
+        {% include 'parciais/_messages.html' %}
+
+        {% csrf_token %}
+        <table class="table">
+            {{form}}
+
+            <tr>
+                <td colspan="2">
+                    <button type="submit" class="btn btn-primary">Cadastrar</button>
+                    <li class="link" ><a href="{% url  'precadastro'%}">Beneficiario ja cadastrado</a></li>
+                </td>
+            </tr>
+        </table>
+
+    </form>
+
+</div>
+
+
+{%endblock%}
