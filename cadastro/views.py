@@ -109,9 +109,6 @@ class CadastroConjugue(UpdateView):
         conjugue = Conjuge(**form.cleaned_data)
         conjugue.titular = titular
 
-        titular2 = CadastroPessoa.objects.last()
-        print('Titular 2 é ', titular2.pk)
-
         conjugue.save()
         return redirect('precadastro')
 

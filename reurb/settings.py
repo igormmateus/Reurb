@@ -40,6 +40,7 @@ INSTALLED_APPS = [
     'django.contrib.staticfiles',
     'cadastro.apps.CadastroConfig',
     'accounts.apps.AccountsConfig',
+    'formulario.apps.FormularioConfig'
 ]
 
 MIDDLEWARE = [
