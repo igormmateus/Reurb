@@ -12,7 +12,7 @@ class BairrosAdmin(admin.ModelAdmin):
     pass
 
 class CadastroPessoaAdmin(admin.ModelAdmin):
-    list_display = ('id', 'nome')
+    list_display = ('id', 'nome', 'cpf')
     list_display_links = ('nome',)
 
 admin.site.register(Conjuge)

@@ -76,21 +76,13 @@ class PreCadastroImovel(models.Model):
 
 
 class Formcadastropessoa(forms.ModelForm):
-    def clean(self):
-        data = self.cleaned_data
-        # print(data)
-
     class Meta:
         model = CadastroPessoa
         exclude = ()
 
 
 class Formprecadastro(forms.ModelForm):
-    def clean(self):
-        data = self.cleaned_data
-        # print(data)
-
-    class Meta:
+   class Meta:
         model = PreCadastroImovel
 
         exclude = ('data_cadastro', 'medicao', 'cartorio', 'conferido', 'status', 'proprietario')

@@ -6,6 +6,9 @@
 {%block corpo%}
 <h1> {{imovel.proprietario}}</h1>
 <dl>
+        <dt>Telefone</dt>
+    <dd>{{imovel.proprietario.telefone}}</dd>
+
     <dt>Logradouro</dt>
     <dd>{{imovel.logradouro}}</dd>
 
@@ -16,7 +19,7 @@
     <dd>{{imovel.bairro}}</dd>
 
     <dt> Status</dt>
-    <dd>{{imovel.status}}</dd>
+    <dd>{{status}}</dd>
 
 
 

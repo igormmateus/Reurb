@@ -25,7 +25,7 @@ def login(request):
 
 def cadastro_usuario(request):
     if request.user.is_authenticated:
-        return redirect('dashboard')
+        return redirect('../../')
 
     if request.method != 'POST':
         return render(request, 'accounts/cadastro_usuario.html')
@@ -72,11 +72,6 @@ def cadastro_usuario(request):
 
 
 @login_required(redirect_field_name='index_login')
-def dashboard(request):
-    return render(request, 'cadastro/index.html')
-    # return redirect('cadastro/index.html')
-
-
 def logout(request):
     auth.logout(request)
-    return redirect('dashboard')
+    return redirect('index_login')

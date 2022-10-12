@@ -4,6 +4,8 @@ from django.db.models import Value
 from django.db.models.functions import Concat
 from django.contrib.auth.decorators import login_required
 from django.views.generic import UpdateView
+from reurb.bibliotecas.formulario import escolha
+from .VerificaCPF import limpa_cpf
 
 from .models import Formprecadastro, Formcadastropessoa, Formconjugue, PreCadastroImovel, CadastroPessoa, Conjuge
 from .VerificaCPF import verifica_cpf
@@ -22,8 +24,9 @@ def index(request):
 @login_required(redirect_field_name='index_login')
 def ver_imovel(request, imovel_id):
     imovel = get_object_or_404(PreCadastroImovel, id=imovel_id)
+    status = escolha(imovel.opcao_status,imovel.status)
     return render(request, 'cadastro/ver_imovel.html', {
-        'imovel': imovel
+        'imovel': imovel, 'status' : status
     })
 
 
@@ -86,10 +89,12 @@ def cadastro_beneficiario(request):
         form = Formcadastropessoa(request.POST)
         return render(request, 'cadastro/cadastro_beneficiario.html', {'form': form})
 
-    form.save()
-
+    # form.save()
+    titular = CadastroPessoa(**form.cleaned_data)
     estado_civil = request.POST.get('estado_civil')
-    titular = get_object_or_404(CadastroPessoa, nome=request.POST.get('nome'))
+    # titular = get_object_or_404(CadastroPessoa, cpf=request.POST.get('cpf'))
+    titular.cpf = limpa_cpf(request.POST.get('cpf'))
+    titular.save()
 
     if estado_civil == 'C':
         return redirect('conjugue', pk=titular.id)

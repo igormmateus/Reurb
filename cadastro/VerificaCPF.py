@@ -57,10 +57,13 @@ def gera_cpf():
 
 
 def limpa_cpf(cpf):
+    # cpf =
     if len(cpf) > 11:
         cpf = cpf[0:3] + cpf[4:7] + cpf[8:11] + cpf[12:14]  # limpa o cpf deixando apenas os numeros
     return cpf
 
 
 def imprime_cpf(cpf):
-    return f'{cpf[0:3]}.{cpf[3:6]}.{cpf[6:9]}-{cpf[9:11]}'
+    if len(cpf)<10:
+        return f'{cpf[0:3]}.{cpf[3:6]}.{cpf[6:9]}-{cpf[9:11]}'
+    return cpf
