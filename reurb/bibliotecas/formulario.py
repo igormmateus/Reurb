@@ -16,12 +16,13 @@ def convertDate(data):
         '12': 'dezembro',
     }
     for m in meses:
-        if m[0] == mes:
+        if m == mes:
             mes = meses[m]
 
     ano = str(data.year)
 
     return dia, mes, ano
+
 
 def escolha(opcoes, escolha):
     for opcao in opcoes:
@@ -29,3 +30,12 @@ def escolha(opcoes, escolha):
             return opcao[1]
 
 
+def limpa_telefone(telefone):
+    telefone = telefone.replace('-', '')
+    telefone = telefone.replace(' ','')
+    telefone = telefone.replace('(','')
+    telefone = telefone.replace(')', '')
+    if len(telefone) != 11:
+        return False
+    else:
+        return f'({telefone[0:2]}) {telefone[2:7]}-{telefone[7:11]} '

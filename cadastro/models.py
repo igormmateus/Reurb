@@ -1,6 +1,7 @@
 from django.db import models
 from django.utils import timezone
 from django import forms
+from .VerificaCPF import verifica_cpf
 
 
 class CadastroPessoa(models.Model):
@@ -89,6 +90,14 @@ class Formprecadastro(forms.ModelForm):
 
 
 class Formconjugue(forms.ModelForm):
+    def clean(self):
+        data = self.cleaned_data
+        cpf = data.get('cpf_conj')
+        if not verifica_cpf(cpf):
+            self.add_error(
+                'cpf_conj',
+                'CPF inválido'
+            )
     class Meta:
         model = Conjuge
         exclude = ('titular',)

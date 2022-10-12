@@ -6,7 +6,7 @@ from cadastro.VerificaCPF import imprime_cpf
 import io
 from django.shortcuts import get_object_or_404
 from cadastro.models import PreCadastroImovel, Conjuge
-from reurb.bibliotecas.formulario import convertDate, escolha
+from reurb.bibliotecas.formulario import convertDate, escolha, limpa_telefone
 
 
 
@@ -26,11 +26,12 @@ class ExportDocx(APIView):
         dia, mes, ano = convertDate(imovel.data_cadastro)
 
         estado_civil = escolha(imovel.proprietario.opcao_estado_civil,imovel.proprietario.estado_civil)
+        telefone = limpa_telefone(imovel.proprietario.telefone)
 
         referencias = {
             'Nome.benefiario': imovel.proprietario.nome,
             'cpf.beneficiario': cpf,
-            'telefone.beneficiario': imovel.proprietario.telefone,
+            '(62) telefone.beneficiario': telefone,
             'rua.beneficiario': imovel.logradouro,
             'qd.beneficiario': imovel.quadra,
             'lt.beneficiario': imovel.lote,
@@ -48,7 +49,7 @@ class ExportDocx(APIView):
             'mes': mes,
             'ano': ano,
         }
-
+        ''
         for paragrafo in document.paragraphs:
             for codigo in referencias:
                 paragrafo.text = paragrafo.text.replace(codigo, referencias[codigo].upper())

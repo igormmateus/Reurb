@@ -64,6 +64,6 @@ def limpa_cpf(cpf):
 
 
 def imprime_cpf(cpf):
-    if len(cpf)<10:
+    if len(cpf)<12:
         return f'{cpf[0:3]}.{cpf[3:6]}.{cpf[6:9]}-{cpf[9:11]}'
     return cpf

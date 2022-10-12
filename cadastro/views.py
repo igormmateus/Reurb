@@ -5,10 +5,12 @@ from django.db.models.functions import Concat
 from django.contrib.auth.decorators import login_required
 from django.views.generic import UpdateView
 from reurb.bibliotecas.formulario import escolha
-from .VerificaCPF import limpa_cpf
+from .VerificaCPF import limpa_cpf, verifica_cpf
+from reurb.bibliotecas.formulario import limpa_telefone
+
 
 from .models import Formprecadastro, Formcadastropessoa, Formconjugue, PreCadastroImovel, CadastroPessoa, Conjuge
-from .VerificaCPF import verifica_cpf
+
 
 
 @login_required(redirect_field_name='index_login')
@@ -93,6 +95,13 @@ def cadastro_beneficiario(request):
     titular = CadastroPessoa(**form.cleaned_data)
     estado_civil = request.POST.get('estado_civil')
     # titular = get_object_or_404(CadastroPessoa, cpf=request.POST.get('cpf'))
+    if not limpa_telefone(request.POST.get('telefone')):
+        messages.add_message(request, messages.ERROR, 'telefone incorreto')
+        form = Formcadastropessoa(request.POST)
+        return render(request, 'cadastro/cadastro_beneficiario.html', {'form': form})
+    else:
+        titular.telefone = limpa_telefone(request.POST.get('telefone'))
+
     titular.cpf = limpa_cpf(request.POST.get('cpf'))
     titular.save()
 
@@ -113,6 +122,7 @@ class CadastroConjugue(UpdateView):
         titular = self.get_object()
         conjugue = Conjuge(**form.cleaned_data)
         conjugue.titular = titular
+        conjugue.cpf_conj = limpa_cpf(conjugue.cpf_conj)
 
         conjugue.save()
         return redirect('precadastro')
