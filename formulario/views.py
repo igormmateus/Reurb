@@ -49,7 +49,7 @@ class ExportDocx(APIView):
             'mes': mes,
             'ano': ano,
         }
-        ''
+
         for paragrafo in document.paragraphs:
             for codigo in referencias:
                 paragrafo.text = paragrafo.text.replace(codigo, referencias[codigo].upper())

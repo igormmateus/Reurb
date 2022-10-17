@@ -5,7 +5,7 @@
 {% block corpo %}
 <h1 class="mt-3 mb-3">Cadastro</h1>
 
-<form method="POST" action="{% url 'cadastro' %}">
+<form method="POST" action="{% url 'cadastro_usuario' %}">
     {% include 'parciais/_messages.html' %}
     {% csrf_token %}
   <div class="form-group">
