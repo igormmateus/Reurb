@@ -32,10 +32,10 @@ def escolha(opcoes, escolha):
 
 def limpa_telefone(telefone):
     telefone = telefone.replace('-', '')
-    telefone = telefone.replace(' ','')
-    telefone = telefone.replace('(','')
+    telefone = telefone.replace(' ', '')
+    telefone = telefone.replace('(', '')
     telefone = telefone.replace(')', '')
     if len(telefone) != 11:
         return False
     else:
-        return f'({telefone[0:2]}) {telefone[2:7]}-{telefone[7:11]} '
+        return f'({telefone[0:2]}) {telefone[2:7]}-{telefone[7:12]} '

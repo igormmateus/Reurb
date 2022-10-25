@@ -26,12 +26,11 @@ class ExportDocx(APIView):
         dia, mes, ano = convertDate(imovel.data_cadastro)
 
         estado_civil = escolha(imovel.proprietario.opcao_estado_civil,imovel.proprietario.estado_civil)
-        telefone = limpa_telefone(imovel.proprietario.telefone)
 
         referencias = {
             'Nome.benefiario': imovel.proprietario.nome,
             'cpf.beneficiario': cpf,
-            '(62) telefone.beneficiario': telefone,
+            '(62) telefone.beneficiario': imovel.proprietario.telefone,
             'rua.beneficiario': imovel.logradouro,
             'qd.beneficiario': imovel.quadra,
             'lt.beneficiario': imovel.lote,

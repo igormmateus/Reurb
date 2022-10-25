@@ -6,6 +6,9 @@ from django.contrib.auth.decorators import login_required
 
 
 def login(request):
+    if request.user.is_authenticated:
+        return redirect('../../')
+
     if request.method != 'POST':
         return render(request, 'accounts/login.html')
 
@@ -31,21 +34,21 @@ def cadastro_usuario(request):
         return render(request, 'accounts/cadastro_usuario.html')
 
     nome = request.POST.get('nome')
-    sobrenome = request.POST.get('sobrenome')
-    email = request.POST.get('email')
+    # sobrenome = request.POST.get('sobrenome')
+    # email = request.POST.get('email')
     usuario = request.POST.get('usuario')
     senha = request.POST.get('senha')
     senha2 = request.POST.get('senha2')
 
-    if not nome or not sobrenome or not email or not usuario or not senha or not senha2:
+    if not nome or not usuario or not senha or not senha2:
         messages.error(request, 'Nenhum Campo pode estar vazio')
         return render(request, 'accounts/cadastro_usuario.html')
 
-    try:
-        validate_email(email)
-    except:
-        messages.error(request, 'Email inválido')
-        return render(request, 'accounts/cadastro_usuario.html')
+    # try:
+    #     validate_email(email)
+    # except:
+    #     messages.error(request, 'Email inválido')
+    #     return render(request, 'accounts/cadastro_usuario.html')
 
     if len(senha) < 6:
         messages.error(request, 'Senha muito curta, minimo 6 caracteres')
@@ -55,18 +58,18 @@ def cadastro_usuario(request):
         messages.error(request, 'Usuario ja cadastrado')
         return render(request, 'accounts/cadastro_usuario.html')
 
-    if User.objects.filter(email=email).exists():
-        messages.error(request, 'Usuario ja cadastrado')
-        return render(request, 'accounts/cadastro_usuario.html')
+    # if User.objects.filter(email=email).exists():
+    #     messages.error(request, 'Usuario ja cadastrado')
+    #     return render(request, 'accounts/cadastro_usuario.html')
 
     if senha != senha2:
         messages.error(request, 'Senhas diferentes.')
         return render(request, 'accounts/cadastro_usuario.html')
 
     messages.success(request, 'Cadastro feito com sucesso')
-    user = User.objects.create_user(username=usuario, email=email,
+    user = User.objects.create_user(username=usuario, email='',
                                     password=senha, first_name=nome,
-                                    last_name=sobrenome)
+                                    last_name='')
     user.save()
     return redirect('index_login')
 

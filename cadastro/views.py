@@ -7,6 +7,7 @@ from django.views.generic import UpdateView
 from reurb.bibliotecas.formulario import escolha
 from .VerificaCPF import limpa_cpf, verifica_cpf
 from reurb.bibliotecas.formulario import limpa_telefone
+from django.contrib.auth.models import User
 
 
 from .models import Formprecadastro, Formcadastropessoa, Formconjugue, PreCadastroImovel, CadastroPessoa, Conjuge
@@ -62,9 +63,11 @@ def precadastro(request):
         return render(request, 'cadastro/precadastro.html', {'form': form, 'titulares': titulares})
 
     imovel = PreCadastroImovel(**form.cleaned_data)
-
+    user = User.pk
+    print('********************************', request.user)
     titular = get_object_or_404(CadastroPessoa, id=request.POST.get('proprietario'))
     imovel.proprietario = titular
+    imovel.usuario = request.user
 
 
     imovel.save()

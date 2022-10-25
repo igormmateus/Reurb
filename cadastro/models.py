@@ -1,6 +1,7 @@
 from django.db import models
 from django.utils import timezone
 from django import forms
+from django.contrib.auth.models import User
 from .VerificaCPF import verifica_cpf
 
 
@@ -19,7 +20,7 @@ class CadastroPessoa(models.Model):
     estado_rg = models.CharField(max_length=2)
     nome_pai = models.CharField(max_length=255)
     nome_mae = models.CharField(max_length=255)
-    telefone = models.CharField(max_length=14)
+    telefone = models.CharField(max_length=15)
     profissao = models.CharField(max_length=50)
     estado_civil = models.CharField(max_length=1, choices=opcao_estado_civil)
 
@@ -72,6 +73,7 @@ class PreCadastroImovel(models.Model):
     cartorio = models.CharField(max_length=10, blank=True)
     conferido = models.DateField(blank=True, null=True)
     status = models.CharField(max_length=1, choices=opcao_status, default='I')
+    usuario = models.ForeignKey(User, on_delete=models.DO_NOTHING, default=4)
 
     observacao = models.TextField(blank=True)
 
@@ -86,7 +88,7 @@ class Formprecadastro(forms.ModelForm):
    class Meta:
         model = PreCadastroImovel
 
-        exclude = ('data_cadastro', 'medicao', 'cartorio', 'conferido', 'status', 'proprietario')
+        exclude = ('data_cadastro', 'medicao', 'cartorio', 'conferido', 'status', 'proprietario', 'usuario')
 
 
 class Formconjugue(forms.ModelForm):
