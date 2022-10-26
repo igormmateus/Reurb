@@ -21,7 +21,7 @@ class CadastroPessoa(models.Model):
     nome_pai = models.CharField(max_length=255)
     nome_mae = models.CharField(max_length=255)
     telefone = models.CharField(max_length=15)
-    profissao = models.CharField(max_length=50)
+    profissao = models.CharField(max_length=50, blank=True)
     estado_civil = models.CharField(max_length=1, choices=opcao_estado_civil)
 
     def __str__(self):
@@ -36,7 +36,7 @@ class Conjuge(models.Model):
     estado_rg_conj = models.CharField(max_length=2)
     nome_pai_conj = models.CharField(max_length=255)
     nome_mae_conj = models.CharField(max_length=255)
-    profissao_conj = models.CharField(max_length=50)
+    profissao_conj = models.CharField(max_length=50, blank=True)
     titular = models.ForeignKey(CadastroPessoa, on_delete=models.CASCADE)
 
     def __str__(self):
@@ -57,6 +57,7 @@ class PreCadastroImovel(models.Model):
         ('M', 'Medição'),
         ('S', 'Suspenso'),
         ('A', 'Arquivado'),
+        ('P', 'Pendente'),
         ('G', 'Aguardando registro'),
         ('R', 'Registrado'),
 
@@ -88,7 +89,7 @@ class Formprecadastro(forms.ModelForm):
    class Meta:
         model = PreCadastroImovel
 
-        exclude = ('data_cadastro', 'medicao', 'cartorio', 'conferido', 'status', 'proprietario', 'usuario')
+        exclude = ('data_cadastro', 'medicao', 'cartorio', 'conferido', 'status', 'proprietario', 'usuario', 'observacao')
 
 
 class Formconjugue(forms.ModelForm):

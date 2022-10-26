@@ -63,12 +63,22 @@ def precadastro(request):
         return render(request, 'cadastro/precadastro.html', {'form': form, 'titulares': titulares})
 
     imovel = PreCadastroImovel(**form.cleaned_data)
-    user = User.pk
-    print('********************************', request.user)
+
     titular = get_object_or_404(CadastroPessoa, id=request.POST.get('proprietario'))
+    if titular.estado_civil == 'C' or titular.estado_civil == 'U':
+        conjugue = get_object_or_404(Conjuge, titular=request.POST.get('proprietario'))
     imovel.proprietario = titular
     imovel.usuario = request.user
-
+    observacao = ''
+    if titular.profissao == 'não declarado':
+        observacao += 'falta profissão do(a) titular. \n'
+        imovel.status = 'P'
+    if titular.estado_civil == 'C' or titular.estado_civil == 'U':
+        conjugue = get_object_or_404(Conjuge, titular=request.POST.get('proprietario'))
+        if conjugue.profissao_conj == 'não declarado':
+            observacao += 'falta profissão do(a) conjugue'
+            imovel.status = 'P'
+    imovel.observacao = observacao
 
     imovel.save()
 
@@ -95,8 +105,11 @@ def cadastro_beneficiario(request):
         return render(request, 'cadastro/cadastro_beneficiario.html', {'form': form})
 
     # form.save()
-    titular = CadastroPessoa(**form.cleaned_data)
+
     estado_civil = request.POST.get('estado_civil')
+    titular = CadastroPessoa(**form.cleaned_data)
+    if not request.POST.get('profissao'):
+        titular.profissao = 'não declarado'
     # titular = get_object_or_404(CadastroPessoa, cpf=request.POST.get('cpf'))
     if not limpa_telefone(request.POST.get('telefone')):
         messages.add_message(request, messages.ERROR, 'telefone incorreto')
@@ -126,29 +139,8 @@ class CadastroConjugue(UpdateView):
         conjugue = Conjuge(**form.cleaned_data)
         conjugue.titular = titular
         conjugue.cpf_conj = limpa_cpf(conjugue.cpf_conj)
+        if not self.request.POST.get('profissao_conj'):
+            conjugue.profissao_conj = 'não declarado'
 
         conjugue.save()
         return redirect('precadastro')
-
-    # def conjugue(request):
-    #     # titular = get_object_or_404(CadastroPessoa)
-    #     # print(titular)
-    #     if request.method != 'POST':
-    #         form = Formconjugue()
-    #         return render(request, 'cadastro/conjugue.html', {
-    #             'form': form
-    #         })
-    #     form = Formconjugue(request.POST)
-    #     titular = CadastroPessoa(**form.cleaned_data)
-    #     print('O titular é: ' + titular)
-    #
-    #
-    #     if not form.is_valid():
-    #         form = Formconjugue(request.POST)
-    #         return render(request, 'cadastro/conjugue.html', {
-    #             'form': form,
-    #         })
-    #
-    #     form.save()
-    #     messages.add_message(request, messages.SUCCESS, 'cadastro feito!')
-    #     return redirect('precadastro')
