@@ -39,8 +39,8 @@ class Conjuge(models.Model):
     profissao_conj = models.CharField(max_length=50, blank=True)
     titular = models.ForeignKey(CadastroPessoa, on_delete=models.CASCADE)
 
-    def __str__(self):
-        return self.nome_conj
+    # def __str__(self):
+    #     return self.nome_conj
 
 
 class Bairro(models.Model):
@@ -75,8 +75,16 @@ class PreCadastroImovel(models.Model):
     conferido = models.DateField(blank=True, null=True)
     status = models.CharField(max_length=1, choices=opcao_status, default='I')
     usuario = models.ForeignKey(User, on_delete=models.DO_NOTHING, default=4)
+    slug = models.SlugField(max_length=250, blank=True, null=True, unique=True)
 
     observacao = models.TextField(blank=True)
+
+    def save(self, *args, **kwargs):
+        if not  self.slug:
+            slug = f'{self.quadra}/{self.lote}-{self.bairro}'
+            self.slug = slug
+
+            super().save(*args, **kwargs)
 
 
 class Formcadastropessoa(forms.ModelForm):
@@ -89,7 +97,7 @@ class Formprecadastro(forms.ModelForm):
    class Meta:
         model = PreCadastroImovel
 
-        exclude = ('data_cadastro', 'medicao', 'cartorio', 'conferido', 'status', 'proprietario', 'usuario', 'observacao')
+        exclude = ('data_cadastro', 'medicao', 'cartorio', 'conferido', 'status', 'proprietario', 'usuario', 'observacao', 'slug')
 
 
 class Formconjugue(forms.ModelForm):

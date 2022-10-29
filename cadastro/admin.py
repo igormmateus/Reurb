@@ -15,7 +15,10 @@ class CadastroPessoaAdmin(admin.ModelAdmin):
     list_display = ('id', 'nome', 'cpf', 'telefone')
     list_display_links = ('nome',)
 
-admin.site.register(Conjuge)
+class ConjugeAdmin(admin.ModelAdmin):
+    list_display = ('nome_conj', 'titular')
+
+admin.site.register(Conjuge, ConjugeAdmin)
 admin.site.register(CadastroPessoa, CadastroPessoaAdmin)
 admin.site.register(PreCadastroImovel, PreCadastroImovelAdmin)
 admin.site.register(Bairro)

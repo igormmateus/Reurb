@@ -64,6 +64,17 @@ def precadastro(request):
 
     imovel = PreCadastroImovel(**form.cleaned_data)
 
+    slug = f'{imovel.logradouro}-{imovel.quadra}/{imovel.lote}'
+    imovel.slug = slug
+
+    imovelexiste = PreCadastroImovel.objects.filter(
+        slug__icontains=slug)
+
+    if imovelexiste:
+        messages.add_message(request, messages.ERROR, 'Imovel ja cadastrado')
+        form = Formprecadastro(request.POST)
+        return render(request, 'cadastro/precadastro.html', {'form': form, 'titulares': titulares})
+
     titular = get_object_or_404(CadastroPessoa, id=request.POST.get('proprietario'))
     if titular.estado_civil == 'C' or titular.estado_civil == 'U':
         conjugue = get_object_or_404(Conjuge, titular=request.POST.get('proprietario'))

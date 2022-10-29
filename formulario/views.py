@@ -16,8 +16,8 @@ class ExportDocx(APIView):
         document = Document('formulario/requerimento.docx')
         imovel = get_object_or_404(PreCadastroImovel, id=pk)
         if imovel.proprietario.estado_civil == 'C':
-            conjugue = get_object_or_404(Conjuge, nome=imovel.proprietario.id)
-            profissaoC = conjugue.profissao
+            conjugue = get_object_or_404(Conjuge, titular=imovel.proprietario.id)
+            profissaoC = conjugue.profissao_conj
         else:
             profissaoC = ''
 
