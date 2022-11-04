@@ -3,33 +3,38 @@ from django.shortcuts import render, get_object_or_404, redirect
 from django.db.models import Value
 from django.db.models.functions import Concat
 from django.contrib.auth.decorators import login_required
-from django.views.generic import UpdateView
+from django.views.generic import UpdateView, ListView
 from reurb.bibliotecas.formulario import escolha
 from .VerificaCPF import limpa_cpf, verifica_cpf
 from reurb.bibliotecas.formulario import limpa_telefone
 from django.contrib.auth.models import User
 
-
 from .models import Formprecadastro, Formcadastropessoa, Formconjugue, PreCadastroImovel, CadastroPessoa, Conjuge
 
 
+class Index(ListView):
+    model = PreCadastroImovel
+    template_name = 'cadastro/index.html'
+    context_object_name = 'imoveis'
+    paginate_by = 10
 
-@login_required(redirect_field_name='index_login')
-def index(request):
-    imoveis = PreCadastroImovel.objects.order_by('bairro').exclude(
-        status='A' or 'S' or 'R'
-    )
-    return render(request, 'cadastro/index.html', {
-        'imoveis': imoveis
-    })
+    def get_queryset(self):
+        if not self.request.user.is_authenticated:
+            return redirect('index_login')
+        qs = super().get_queryset()
+        bairro = self.kwargs.get('bairro', None)
+
+        qs = qs.order_by('bairro', 'quadra').exclude(status='A' or 'S' or 'R')
+
+        return qs
 
 
 @login_required(redirect_field_name='index_login')
 def ver_imovel(request, imovel_id):
     imovel = get_object_or_404(PreCadastroImovel, id=imovel_id)
-    status = escolha(imovel.opcao_status,imovel.status)
+    status = escolha(imovel.opcao_status, imovel.status)
     return render(request, 'cadastro/ver_imovel.html', {
-        'imovel': imovel, 'status' : status
+        'imovel': imovel, 'status': status
     })
 
 
@@ -65,7 +70,7 @@ def precadastro(request):
     imovel = PreCadastroImovel(**form.cleaned_data)
 
     slug = f'{imovel.logradouro}-{imovel.quadra}/{imovel.lote}'
-    imovel.slug = slug
+
 
     imovelexiste = PreCadastroImovel.objects.filter(
         slug__icontains=slug)
@@ -155,3 +160,11 @@ class CadastroConjugue(UpdateView):
 
         conjugue.save()
         return redirect('precadastro')
+
+# def criar_slug(request):
+#     imoveis = PreCadastroImovel.objects.order_by('id')
+#     for imovel in imoveis:
+#         imovel.slug = ''
+#         imovel.save()
+#
+#     return redirect('index')

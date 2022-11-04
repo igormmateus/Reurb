@@ -22,5 +22,5 @@ urlpatterns = [
     path('accounts/', include('accounts.urls')),
     path('cadastro/', include('cadastro.urls')),
     path('formulario/', include(('formulario.urls'))),
-    path('', views.index)
+    path('', views.Index.as_view())
 ]
